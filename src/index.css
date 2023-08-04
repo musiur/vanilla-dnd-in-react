@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* body {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+} */
+
+@layer base {
+    html {
+        font-family: 'Lato', sans-serif;
+    }
+  }
+
+@layer components {
+    .button {
+        @apply bg-[#112873] text-white text-lg font-bold px-4 py-2 rounded-full hover:opacity-75
+    }
+}
+
+@layer components {
+  .form-button {
+      @apply w-full bg-[#112873] text-white text-lg font-bold px-4 py-2 rounded-sm hover:opacity-75
+  }
+}
+
+
+.container {
+  @apply max-w-[1336px] px-5 lg:px-0 mx-auto;
+}
+
+.section-gap-padding {
+  @apply py-20;
+}
+.section-gap-margin {
+  @apply my-20;
+}
+
+
+
