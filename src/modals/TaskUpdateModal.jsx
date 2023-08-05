@@ -22,7 +22,8 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const prevTasks = board[0].columns[0].tasks;
+    const prevTasks = board[0].columns[updateContext.index].tasks;
+    console.log(prevTasks)
     const newTask = {
       ...defaultValues,
       title: task,
@@ -42,7 +43,6 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
         index: updateContext.index
     }));
     closeModal(false);
-    alert("Task updated!");
   };
 
   return (

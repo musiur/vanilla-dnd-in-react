@@ -40,7 +40,6 @@ const TaskModal = ({ closeModal, addContext }) => {
     };
     dispatch(addTask(newTask));
     closeModal(false);
-    alert("Task added!");
   };
 
   return (

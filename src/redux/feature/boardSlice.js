@@ -26,6 +26,7 @@ export const boardSlice = createSlice({
     },
     updateTask: (state, action) => {
       const { tasks, index } = action.payload;
+      console.log(tasks, index)
       // removing task from tasks list in board > todo list
       state.board[0].columns[index].tasks = tasks;
     },

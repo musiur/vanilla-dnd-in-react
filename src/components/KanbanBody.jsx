@@ -29,6 +29,7 @@ const KanbanBody = () => {
   // updator of task information
   const UpdateTaskHandler = (id, index) => {
     setSelectedTask(id);
+    console.log(id, index)
     setAddContext({ index });
     setIsOpenModal(true);
   };
@@ -41,8 +42,8 @@ const KanbanBody = () => {
     );
   };
 
-  const handleOnDrop = (e, to, toIndex) => {
-    const { id, from, fromIndex } = JSON.parse(e.dataTransfer.getData("data"));
+  const handleOnDrop = (e, toIndex) => {
+    const { id, fromIndex } = JSON.parse(e.dataTransfer.getData("data"));
 
     // return nothing when from and to equal
     if (fromIndex === toIndex) return;
@@ -116,7 +117,7 @@ const KanbanBody = () => {
                   key={name}
                   className="border mx-5 rounded-md"
                   onDragOver={handleOnDragOver}
-                  onDrop={(e) => handleOnDrop(e, name, index)}
+                  onDrop={(e) => handleOnDrop(e, index)}
                 >
                   <div className="flex items-center justify-between gap-10 p-3 border-b">
                     <h4 className="font-bold">
