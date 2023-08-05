@@ -119,7 +119,7 @@ const KanbanBody = () => {
                   onDragOver={handleOnDragOver}
                   onDrop={(e) => handleOnDrop(e, index)}
                 >
-                  <div className="flex items-center justify-between gap-10 p-3 border-b">
+                  <div className="flex items-center justify-between gap-5 p-3 border-b">
                     <h4 className="font-bold">
                       {name} ({tasks.length})
                     </h4>
