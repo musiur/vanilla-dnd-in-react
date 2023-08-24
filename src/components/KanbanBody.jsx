@@ -132,9 +132,21 @@ const KanbanBody = () => {
                   onDrop={(e) => handleOnDrop(e, index)}
                 >
                   <div className="flex items-center justify-between gap-5 p-3 border-b">
-                    <h4 className="font-bold">
-                      {name} ({tasks.length})
-                    </h4>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          index === 0
+                            ? "bg-indigo-400"
+                            : index === 1
+                            ? "bg-orange-400"
+                            : "bg-green-400"
+                        }`}
+                      ></div>
+                      <h4 className="font-bold">
+                        {" "}
+                        {name} ({tasks.length})
+                      </h4>
+                    </div>
                     <button
                       className="border rounded-md p-2 hover:bg-gray-100"
                       onClick={() => AddTaskHandler(index, name)}
@@ -146,6 +158,7 @@ const KanbanBody = () => {
                     <div className="flex flex-col gap-3 p-8 min-h-[50vh]">
                       {tasks.map((task) => {
                         const { id, title, description, duedate } = task;
+                        const due = new Date(duedate);
                         return (
                           <div
                             key={id}
@@ -170,7 +183,7 @@ const KanbanBody = () => {
                             </span>
                             <h5 className="font-semibold">{title}</h5>
                             <p className="text-gray-400">{description}</p>
-                            <p>Due: {duedate}</p>
+                            <p>Due: {due.toLocaleDateString()}</p>
                           </div>
                         );
                       })}
