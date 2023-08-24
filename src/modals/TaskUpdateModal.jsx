@@ -2,12 +2,16 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTask } from "../redux/feature/boardSlice";
+import { DatePicker } from "../components/ui/date-picker";
+import { Button } from "../components/ui/button";
+import { X } from "lucide-react";
 
-
+// eslint-disable-next-line react/prop-types
 const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
   // redux store
   const { board } = useSelector((state) => state.board);
   const dispatch = useDispatch();
+  // eslint-disable-next-line react/prop-types
   const defaultValues = board[0].columns[updateContext.index].tasks.filter(
     (task) => task.id === selectedTask
   )[0];
@@ -22,44 +26,48 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // eslint-disable-next-line react/prop-types
     const prevTasks = board[0].columns[updateContext.index].tasks;
-    console.log(prevTasks)
+    console.log(prevTasks);
     const newTask = {
       ...defaultValues,
       title: task,
       description,
       duedate: selectedDate,
     };
-    const newTaskList = prevTasks.map(task => {
-        if(task.id === selectedTask){
-            return newTask
-        }else{
-            return task
-        }
-    })
-    console.log(newTaskList)
-    dispatch(updateTask({
+    const newTaskList = prevTasks.map((task) => {
+      if (task.id === selectedTask) {
+        return newTask;
+      } else {
+        return task;
+      }
+    });
+    console.log(newTaskList);
+    dispatch(
+      updateTask({
         tasks: newTaskList,
-        index: updateContext.index
-    }));
+        // eslint-disable-next-line react/prop-types
+        index: updateContext.index,
+      })
+    );
     closeModal(false);
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-[#abd6db] bg-opacity-30 z-10">
-      <div className="relative bg-white p-6 rounded-lg shadow-lg w-72 h-auto">
-        <h1 className="text-2xl font-bold mb-3">Update</h1>
+      <div className="relative bg-white p-6 rounded-lg shadow-lg w-[450px] h-auto">
+        <h1 className="text-2xl font-bold mb-3">Update Task</h1>
         <button
           onClick={() => closeModal(false)}
           className="absolute top-0 right-0 mt-2 mr-2 text-red-600 font-bold text-xl"
         >
-          &times;
+          <X />
         </button>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="task" className="block font-bold mb-2">
-              Title:
+              Title
             </label>
             <input
               type="text"
@@ -72,7 +80,7 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
           </div>
           <div className="mb-4">
             <label htmlFor="description" className="block font-bold mb-2">
-              Task Description:
+              Task Description
             </label>
             <textarea
               id="description"
@@ -84,14 +92,10 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
           </div>
           <div className="mb-4">
             <label htmlFor="date" className="block font-bold mb-2">
-              Due Date:
+              Due Date
             </label>
             <div className="w-full">
-              <input
-                id="date"
-                type="date"
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                selected={selectedDate}
+              <DatePicker
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
                 }}
@@ -99,9 +103,9 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
               />
             </div>
           </div>
-          <button type="submit" className="form-button">
-            Update
-          </button>
+          <Button type="submit" className="form-button">
+            Update Task
+          </Button>
         </form>
       </div>
     </div>

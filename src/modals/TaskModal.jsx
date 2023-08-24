@@ -2,6 +2,9 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../redux/feature/boardSlice";
+import { Button } from "../components/ui/button";
+import { X } from "lucide-react";
+import { DatePicker } from "../components/ui/date-picker";
 
 export const CreateUID = (data) => {
   let ID = 0;
@@ -18,8 +21,8 @@ export const CreateUID = (data) => {
   return ID + 1;
 };
 
+// eslint-disable-next-line react/prop-types
 const TaskModal = ({ closeModal, addContext }) => {
-  console.log(addContext);
   // redux store
   const { board } = useSelector((state) => state.board);
   const dispatch = useDispatch();
@@ -30,13 +33,14 @@ const TaskModal = ({ closeModal, addContext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // eslint-disable-next-line react/prop-types
     const prevTasks = board[0].columns[addContext.id].tasks;
     const newTask = {
       id: CreateUID(prevTasks),
       title: task,
       description,
       duedate: selectedDate,
-      addContext
+      addContext,
     };
     dispatch(addTask(newTask));
     closeModal(false);
@@ -44,19 +48,19 @@ const TaskModal = ({ closeModal, addContext }) => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-[#abd6db] bg-opacity-30 z-10">
-      <div className="relative bg-white p-6 rounded-lg shadow-lg w-72 h-auto">
-        <h1 className="text-2xl font-bold mb-3">Add New Task</h1>
+      <div className="relative bg-white p-6 rounded-lg shadow-lg min-w-[310px] w-[450px] h-auto">
+        <h1 className="text-2xl font-bold mb-3">New Task</h1>
         <button
           onClick={() => closeModal(false)}
           className="absolute top-0 right-0 mt-2 mr-2 text-red-600 font-bold text-xl"
         >
-          &times;
+          <X />
         </button>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="task" className="block font-bold mb-2">
-              Title:
+              Title
             </label>
             <input
               type="text"
@@ -69,7 +73,7 @@ const TaskModal = ({ closeModal, addContext }) => {
           </div>
           <div className="mb-4">
             <label htmlFor="description" className="block font-bold mb-2">
-              Task Description:
+              Task Description
             </label>
             <textarea
               id="description"
@@ -81,23 +85,19 @@ const TaskModal = ({ closeModal, addContext }) => {
           </div>
           <div className="mb-4">
             <label htmlFor="date" className="block font-bold mb-2">
-              Due Date:
+              Due Date
             </label>
             <div className="w-full">
-              <input
-                id="date"
-                type="date"
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-                selected={selectedDate}
+              <DatePicker
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
                 }}
               />
             </div>
           </div>
-          <button type="submit" className="form-button">
-            Create Task
-          </button>
+          <Button type="submit" className="form-button">
+            Add Task
+          </Button>
         </form>
       </div>
     </div>
