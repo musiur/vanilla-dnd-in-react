@@ -7,6 +7,7 @@ import TaskModal, { CreateUID } from "../modals/TaskModal";
 import Wave from "../assets/images/backgrounds/shapes/wave";
 import WaveLine from "../assets/images/backgrounds/shapes/waveline";
 import "../styles/backgrounds/wavy.css";
+import format from "date-fns/format";
 
 const KanbanBody = () => {
   const { board } = useSelector((state) => state.board);
@@ -26,7 +27,6 @@ const KanbanBody = () => {
   const RemoveTaskHandler = (id, index) => {
     const prevTasks = [...board[0].columns[index].tasks];
     const tasks = [...prevTasks.filter((task) => task.id !== id)];
-    console.log(tasks);
     dispatch(removeTask({ tasks, index }));
   };
   // updator of task information
@@ -57,10 +57,8 @@ const KanbanBody = () => {
       ...board[0].columns[fromIndex].tasks.filter((task) => task.id === id)[0],
     };
 
-    console.log(typeof toIndex, typeof fromIndex, board[0].columns[fromIndex]);
     // finding from list from redux
     let fromTaskList = [...board[0].columns[fromIndex].tasks];
-    // console.log(fromTaskList)
     // // finding to list from redux
     let toTaskList = [...board[0].columns[toIndex].tasks];
     // remove task from the from list
@@ -127,7 +125,7 @@ const KanbanBody = () => {
               return (
                 <div
                   key={name}
-                  className="border mx-5 rounded-md"
+                  className="border mx-5 rounded-md min-h-[50vh]"
                   onDragOver={handleOnDragOver}
                   onDrop={(e) => handleOnDrop(e, index)}
                 >
@@ -155,14 +153,13 @@ const KanbanBody = () => {
                     </button>
                   </div>
                   {tasks.length ? (
-                    <div className="flex flex-col gap-3 p-8 min-h-[50vh]">
+                    <div className="flex flex-col gap-3 p-3 min-h-[50vh]">
                       {tasks.map((task) => {
                         const { id, title, description, duedate } = task;
-                        const due = new Date(duedate);
                         return (
                           <div
                             key={id}
-                            className="p-3 border hover:shadow-xl rounded-md relative"
+                            className="p-3 border hover:shadow-xl rounded-md relative cursor-grab"
                             draggable
                             onDragStart={(e) =>
                               handleOnDrag(e, id, name, index)
@@ -178,19 +175,25 @@ const KanbanBody = () => {
                                 onClick={() => RemoveTaskHandler(id, index)}
                               />
                             </div>
-                            <span className="text-4xl font-black opacity-[20%] absolute top-0 left-0 -ml-[22px]">
+                            <span className="text-4xl font-black text-gray-100 absolute bottom-0 right-0 m-[5px]">
                               {id}
                             </span>
                             <h5 className="font-semibold">{title}</h5>
                             <p className="text-gray-400">{description}</p>
-                            <p>Due: {due.toLocaleDateString()}</p>
+                            {duedate ? (
+                              <p className="text-xs mt-3">
+                                Due: {format(duedate, "PPP")}
+                              </p>
+                            ) : null}
                           </div>
                         );
                       })}
                     </div>
-                  ) : index === 0 ? (
-                    <div className="p-3">{"Add task"}</div>
-                  ) : null}
+                  ) : (
+                    <div className="p-3 font-bold text-gray-400 text-2xl">
+                      {"..."}
+                    </div>
+                  )}
                 </div>
               );
             })}

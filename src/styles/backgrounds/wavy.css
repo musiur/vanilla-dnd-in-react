@@ -6,11 +6,11 @@
 
 .wavy-container__half-div {
     @apply absolute top-0 w-full;
-    animation: wavy 100s infinite;
+    animation: wavy 60s infinite;
 }
 .wavy-container__line {
     @apply absolute top-[10vh] w-full;
-    animation: wavy-reverse 100s infinite;
+    animation: wavy-reverse 60s infinite;
 }
 
 @keyframes wavy {
