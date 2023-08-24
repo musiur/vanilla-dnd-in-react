@@ -4,6 +4,9 @@ import { PencilIcon, PlusIcon, X } from "lucide-react";
 import { useState } from "react";
 import TaskUpdateModal from "../modals/TaskUpdateModal";
 import TaskModal, { CreateUID } from "../modals/TaskModal";
+import Wave from "../assets/images/backgrounds/shapes/wave";
+import WaveLine from "../assets/images/backgrounds/shapes/waveline";
+import "../styles/backgrounds/wavy.css";
 
 const KanbanBody = () => {
   const { board } = useSelector((state) => state.board);
@@ -29,7 +32,6 @@ const KanbanBody = () => {
   // updator of task information
   const UpdateTaskHandler = (id, index) => {
     setSelectedTask(id);
-    console.log(id, index)
     setAddContext({ index });
     setIsOpenModal(true);
   };
@@ -51,9 +53,9 @@ const KanbanBody = () => {
     // task: id utilize, from: where comes, to: where set
 
     // finding targeted task
-    const targetedTask = {...board[0].columns[fromIndex].tasks.filter(
-      (task) => task.id === id
-    )[0]};
+    const targetedTask = {
+      ...board[0].columns[fromIndex].tasks.filter((task) => task.id === id)[0],
+    };
 
     console.log(typeof toIndex, typeof fromIndex, board[0].columns[fromIndex]);
     // finding from list from redux
@@ -92,7 +94,20 @@ const KanbanBody = () => {
   };
 
   return (
-    <section className="container section-gap-margin">
+    <section>
+      <div className="wavy-container">
+        <div className="wavy-container__half-div">
+          <Wave />
+        </div>
+        <div className="wavy-container__line">
+          <WaveLine />
+        </div>
+        <div className="absolute top-0 z-10 w-full h-full flex items-center justify-center">
+          <h1 className="text-white font-bold text-2xl lg:text-5xl">
+            Manage your tasks!
+          </h1>
+        </div>
+      </div>
       {openAddModal && addContext ? (
         <TaskModal closeModal={setOpenAddModal} addContext={addContext} />
       ) : null}
@@ -103,11 +118,8 @@ const KanbanBody = () => {
           updateContext={addContext}
         />
       ) : null}
-      <h1 className="text-xl lg:text-3xl xl:text-5xl font-black my-10 text-center">
-        Kanban body
-      </h1>
-      <hr />
-      <div className="py-10">
+
+      <div className="container section-gap-margin">
         {board.length ? (
           <div className="grid grid-cols-3 gap-5">
             {board[0].columns.map((column, index) => {

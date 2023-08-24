@@ -1,0 +1,43 @@
+@import "../../index.css";
+
+.wavy-container {
+    @apply h-[30vh]  bg-primary overflow-hidden relative;
+}
+
+.wavy-container__half-div {
+    @apply absolute top-0 w-full;
+    animation: wavy 100s infinite;
+}
+.wavy-container__line {
+    @apply absolute top-0 w-full;
+    animation: wavy-reverse 100s infinite;
+}
+
+@keyframes wavy {
+    0% {
+        margin-left: 0;
+        transform: translate3d(0, -25px, 0);
+    }
+    50% {
+        transform: translate3d(0, 5px, 0);
+        margin-left: -1600px;
+    }
+    100% {
+        margin-left: 0px;
+        transform: translate3d(0, -25px, 0);
+    }
+}
+@keyframes wavy-reverse {
+    0% {
+        transform: translate3d(0, 5px, 0);
+        margin-left: -1600px;
+    }
+    50% {
+        transform: translate3d(0, -25px, 0);
+        margin-left: 0px;
+    }
+    100% {
+        transform: translate3d(0, 5px, 0);
+        margin-left: -1600px;
+    }
+}
