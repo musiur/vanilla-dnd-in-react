@@ -13,7 +13,7 @@ import { useEffect } from "react";
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export function DatePicker({ onChange, name, defaultValue }) {
   const [date, setDate] = React.useState(
-    defaultValue ? defaultValue : null
+    defaultValue ? defaultValue : new Date()
   );
   useEffect(() => {
     if (date) {
