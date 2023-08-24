@@ -54,9 +54,8 @@ const TaskUpdateModal = ({ closeModal, selectedTask, updateContext }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-[#abd6db] bg-opacity-30 z-10">
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur bg-black/30 z-10">
       <div className="relative bg-white p-6 rounded-lg shadow-lg w-[450px] h-auto">
-        <h1 className="text-2xl font-bold mb-3">Update Task</h1>
         <button
           onClick={() => closeModal(false)}
           className="absolute top-0 right-0 mt-2 mr-2 text-red-600 font-bold text-xl"

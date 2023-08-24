@@ -7,6 +7,7 @@ import TaskModal, { CreateUID } from "../modals/TaskModal";
 import Wave from "../assets/images/backgrounds/shapes/wave";
 import WaveLine from "../assets/images/backgrounds/shapes/waveline";
 import "../styles/backgrounds/wavy.css";
+import "../styles/components/kanvanbody.css";
 import format from "date-fns/format";
 
 const KanbanBody = () => {
@@ -100,10 +101,8 @@ const KanbanBody = () => {
         <div className="wavy-container__line">
           <WaveLine />
         </div>
-        <div className="absolute top-0 z-10 w-full h-full flex items-center justify-center">
-          <h1 className="text-white font-bold text-2xl lg:text-5xl">
-            Manage your tasks!
-          </h1>
+        <div className="hero-title-container">
+          <h1 className="hero-title">Manage your tasks!</h1>
         </div>
       </div>
       {openAddModal && addContext ? (
@@ -117,33 +116,32 @@ const KanbanBody = () => {
         />
       ) : null}
 
-      <div className="container section-gap-margin">
+      <div className="board-container">
         {board.length ? (
-          <div className="grid grid-cols-3 gap-5">
+          <div className="board-container__grid">
             {board[0].columns.map((column, index) => {
               const { name, tasks } = column;
               return (
                 <div
                   key={name}
-                  className="border mx-5 rounded-md min-h-[50vh]"
+                  className="grid__task-list-column"
                   onDragOver={handleOnDragOver}
                   onDrop={(e) => handleOnDrop(e, index)}
                 >
-                  <div className="flex items-center justify-between gap-5 p-3 border-b">
-                    <div className="flex items-center gap-2">
+                  <div className="column__container">
+                    <div className="column__header">
                       <div
-                        className={`w-3 h-3 rounded-full ${
+                        className={`column__signature ${
                           index === 0
                             ? "bg-indigo-400"
                             : index === 1
                             ? "bg-orange-400"
                             : "bg-green-400"
                         }`}
-                      ></div>
-                      <h4 className="font-bold">
-                        {" "}
-                        {name} ({tasks.length})
-                      </h4>
+                      >
+                        {tasks.length}
+                      </div>
+                      <h4 className="font-bold"> {name}</h4>
                     </div>
                     <button
                       className="border rounded-md p-2 hover:bg-gray-100"
@@ -153,46 +151,49 @@ const KanbanBody = () => {
                     </button>
                   </div>
                   {tasks.length ? (
-                    <div className="flex flex-col gap-3 p-3 min-h-[50vh]">
+                    <div className="column__task-list-container">
                       {tasks.map((task) => {
                         const { id, title, description, duedate } = task;
                         return (
                           <div
                             key={id}
-                            className="p-3 border hover:shadow-xl rounded-md relative cursor-grab"
+                            className="task-cards"
                             draggable
                             onDragStart={(e) =>
                               handleOnDrag(e, id, name, index)
                             }
                           >
-                            <div className="absolute top-0 right-0 m-2 flex items-center gap-1">
+                            <div className="task-cards__action-container">
                               <PencilIcon
-                                className="w-6 h-6 px-1 rounded-full bg-gray-50 hover:bg-blue-100 hover:text-blue-400 cursor-pointer"
+                                className="task-cards__action-update"
                                 onClick={() => UpdateTaskHandler(id, index)}
                               />
                               <X
-                                className="w-6 h-6 px-1 rounded-full bg-gray-50 hover:bg-red-100 hover:text-red-400 cursor-pointer"
+                                className="task-cards__action-remove"
                                 onClick={() => RemoveTaskHandler(id, index)}
                               />
                             </div>
-                            <span className="text-4xl font-black text-gray-100 absolute bottom-0 right-0 m-[5px]">
-                              {id}
-                            </span>
-                            <h5 className="font-semibold">{title}</h5>
-                            <p className="text-gray-400">{description}</p>
-                            {duedate ? (
-                              <p className="text-xs mt-3">
-                                Due: {format(duedate, "PPP")}
-                              </p>
-                            ) : null}
+                            <span className="task-cards__uid">{id}</span>
+                            <div className="task-cards__grid">
+                              <div className="task-cards__element-container">
+                                <h5 className="task-cards__header">{title}</h5>
+                                <p className="task-cards__description ">
+                                  {description}
+                                </p>
+                                {duedate ? (
+                                  <p className="task-cards__duedate">
+                                    Due: {format(duedate, "PPP")}
+                                  </p>
+                                ) : null}
+                              </div>
+                              <div className="col-span-1 w-10 h-10 rounded-full bg-indigo-300 mt-auto flex items-center justify-center text-white">A</div>
+                            </div>
                           </div>
                         );
                       })}
                     </div>
                   ) : (
-                    <div className="p-3 font-bold text-gray-400 text-2xl">
-                      {"..."}
-                    </div>
+                    <div className="task-cards__empty-list">{"..."}</div>
                   )}
                 </div>
               );
