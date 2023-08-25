@@ -5,6 +5,7 @@ import { addTask } from "../redux/feature/boardSlice";
 import { Button } from "../components/ui/button";
 import { X } from "lucide-react";
 import { DatePicker } from "../components/ui/date-picker";
+import Errors from "../components/errors";
 
 export const CreateUID = (data) => {
   let ID = 0;
@@ -21,29 +22,53 @@ export const CreateUID = (data) => {
   return ID + 1;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const validator = (data, errorSetter) => {
+  let obj = {};
+  if(!data.title.trim()){
+    obj.title = "Title is required!"
+  }
+  if(!data.description.trim()){
+    obj.description = "Description is required!"
+  }
+  if(!data.duedate){
+    obj.duedate = "Due date is required!"
+  }
+  errorSetter(obj);
+  return obj;
+}
+
 // eslint-disable-next-line react/prop-types
 const TaskModal = ({ closeModal, addContext }) => {
   // redux store
   const { board } = useSelector((state) => state.board);
   const dispatch = useDispatch();
 
-  const [task, setTask] = useState("Add title to your task!");
-  const [description, setDescription] = useState("Add your custom description to understand the task more deeper");
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "Add title to your task!",
+    description: "Add your custom description to understand the task more deeper",
+    duedate: new Date()
+  })
+  const [errors, setErrors] = useState(null);
+
+  const handleOnChange = (e) => {
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value});
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line react/prop-types
-    const prevTasks = board[0].columns[addContext.id].tasks;
-    const newTask = {
-      id: CreateUID(prevTasks),
-      title: task,
-      description,
-      duedate: selectedDate,
-      addContext,
-    };
-    dispatch(addTask(newTask));
-    closeModal(false);
+    if (Object.keys(validator(formData, setErrors)).length === 0) {
+      // eslint-disable-next-line react/prop-types
+      const prevTasks = board[0].columns[addContext.id].tasks;
+      const newTask = {
+        id: CreateUID(prevTasks),
+        addContext,
+        ...formData
+      };
+      dispatch(addTask(newTask));
+      closeModal(false);
+    }
   };
 
   return (
@@ -58,17 +83,19 @@ const TaskModal = ({ closeModal, addContext }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="task" className="block font-bold mb-2">
+            <label htmlFor="title" className="block font-bold mb-2">
               Title
             </label>
             <input
               type="text"
-              id="task"
+              id="title"
               className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
+              value={formData.title}
+              name="title"
+              onChange={handleOnChange}
               placeholder="Enter title"
             />
+            <Errors message={errors?.title} />
           </div>
           <div className="mb-4">
             <label htmlFor="description" className="block font-bold mb-2">
@@ -77,22 +104,25 @@ const TaskModal = ({ closeModal, addContext }) => {
             <textarea
               id="description"
               className="w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300 h-32"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formData.description}
+              name="description"
+              onChange={handleOnChange}
               placeholder="Enter task description"
             />
+            <Errors message={errors?.description} />
           </div>
           <div className="mb-4">
-            <label htmlFor="date" className="block font-bold mb-2">
+            <label className="block font-bold mb-2">
               Due Date
             </label>
             <div className="w-full">
               <DatePicker
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
-                }}
+                onChange={handleOnChange}
+                name="duedate"
+                defaultValue={formData?.duedate}
               />
             </div>
+            <Errors message={errors?.selectedDate} />
           </div>
           <Button type="submit" className="form-button">
             Add Task
